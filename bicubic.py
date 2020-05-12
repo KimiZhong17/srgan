@@ -36,7 +36,7 @@ class Bicubic():
         return self.recovered
 
     def cal_loss(self):
-        temp = np.array(self.recovered)-np.array(self.target)
+        temp = (np.array(self.recovered)-np.array(self.target))/255
         self.mse = np.sum(temp*temp)/(np.array(self.recovered).size)
         return self.mse
 
