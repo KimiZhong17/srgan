@@ -22,7 +22,7 @@ class DataLoader:
 
         def generator():
             for img in self.ds:
-                img = tf.image.random_crop(img, [384, 384, 3])
+                img = tf.image.random_crop(img, [192, 192, 3])
                 yield img
 
         DataList = tl.files.load_file_list(path=self.FilePath, regx='.*.png', printable=False)
