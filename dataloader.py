@@ -11,6 +11,9 @@ class DataLoader:
         self.FilePath = FilePath
         self.ds = None
         self.train_data = None
+        
+    def __len__(self):
+        raise NotImplementedError
 
     def get_ds(self,batch_size):
 
