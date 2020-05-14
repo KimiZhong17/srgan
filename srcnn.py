@@ -2,7 +2,6 @@ import tensorflow as tf
 import tensorlayer as tl
 from tensorlayer.layers import (Input, Conv2d,UpSampling2d)
 from tensorlayer.models import Model
-import numpy as np
 
 class SRCNN(Model):
     def __init__(self):
@@ -17,7 +16,7 @@ class SRCNN(Model):
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
-        x = tf.math.sigmoid(x)
+        # x = tf.math.sigmoid(x)
         return x
 
 if __name__ == "__main__":
