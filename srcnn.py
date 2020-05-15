@@ -9,7 +9,7 @@ class SRCNN(Model):
         self.upsample1 = UpSampling2d(4, method='bicubic')
         self.conv1 = Conv2d(n_filter=32, filter_size=(9, 9), in_channels=3,act=tf.nn.relu, padding='SAME')
         self.conv2 = Conv2d(n_filter=16, filter_size=(1, 1),in_channels=32,act=tf.nn.relu, padding='SAME')
-        self.conv3 = Conv2d(n_filter=1, filter_size=(5, 5),in_channels=16, padding='SAME')
+        self.conv3 = Conv2d(n_filter=3, filter_size=(5, 5),in_channels=16, padding='SAME')
 
     def forward(self,x):
         x = self.upsample1(x)

@@ -24,7 +24,7 @@ class DataLoader:
         def random_edit(img):
             hr_img = tf.image.random_flip_up_down(img)
             hr_img = tf.image.random_flip_left_right(hr_img)
-            lr_img = tf.image.resize(hr_img, size=[96, 96])
+            lr_img = tf.image.resize(hr_img, size=[48, 48])
             return lr_img, hr_img
 
         def generator():

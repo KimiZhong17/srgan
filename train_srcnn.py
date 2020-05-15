@@ -27,7 +27,7 @@ def train(name,
         loss = 0
         train_loss = 0
 
-        for X,Y in trainloader:
+        for X,Y in trainloader.train_data:
             with tf.GradientTape() as tape:               
                 output = model(X)
                 loss = tl.cost.mean_squared_error(output,Y)
@@ -35,12 +35,12 @@ def train(name,
             grad = tape.gradient(loss,train_weights)
             optimizer.apply_gradients(zip(grad, train_weights))
             
-
+        print(len(trainloader))
         train_loss /= len(trainloader)
         
         model.eval()
         eval_loss = 0
-        for X,Y in evalloader:
+        for X,Y in evalloader.train_data:
             with tf.GradientTape() as tape:               
                 output = model(X)
                 loss = tl.cost.mean_squared_error(output,Y)
@@ -76,8 +76,12 @@ if __name__ == '__main__':
     save_every = 10
     name = 'srcnn_1'
     ##############################################
-    trainloader = DataLoader('file path')
-    evalloader = DataLoader('file path')
+    trainloader = DataLoader('../srgan/DIV2K_train_HR/')
+    trainloader.get_ds(batch_size)
+    print('train data loaded')
+    evalloader = DataLoader('../srgan/DIV2K_valid_HR/')
+    evalloader.get_ds(batch_size)
+    print('test data loaded')
     model = SRCNN()
 
     
