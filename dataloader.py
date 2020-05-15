@@ -26,7 +26,7 @@ class DataLoader:
             hr_img = tf.image.random_flip_up_down(img)
             hr_img = tf.image.random_flip_left_right(hr_img)
             lr_img = tf.image.resize(hr_img, size=[48, 48])
-            return lr_img, hr_img
+            return lr_img/255.0, hr_img/255.0
 
         def generator():
             for img in self.ds:

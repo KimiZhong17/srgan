@@ -6,7 +6,6 @@ import time
 
 
 
-
 def train(name,
         trainloader,
         evalloader,
@@ -18,16 +17,18 @@ def train(name,
         save_every):
 
     optimizer = tf.optimizers.Adam(learning_rate = learning_rate)
-    
+    writer = tf.summary.create_file_writer('./log/'+ name)
     train_weights = model.trainable_weights
+    
+    min_loss = float('inf')
     for epoch in range(n_epoch):
         
-        ts = time.time()
-        model.train()
+        ts = time.time()       
         loss = 0
         train_loss = 0
-
+        
         for X,Y in trainloader.train_data:
+            model.train()
             with tf.GradientTape() as tape:               
                 output = model(X)
                 loss = tl.cost.mean_squared_error(output,Y)
@@ -35,22 +36,33 @@ def train(name,
             grad = tape.gradient(loss,train_weights)
             optimizer.apply_gradients(zip(grad, train_weights))
             
-        print(len(trainloader))
         train_loss /= len(trainloader)
         
-        model.eval()
+        
         eval_loss = 0
         for X,Y in evalloader.train_data:
+            model.eval()
             with tf.GradientTape() as tape:               
                 output = model(X)
                 loss = tl.cost.mean_squared_error(output,Y)
-                eval_loss += loss      
+                eval_loss += loss 
+                
         eval_loss /= len(evalloader)
 
         time_cost = time.time() - ts
         
-        print('iter %d, train_loss = %f , validation_loss = %f, time_cost = %f'  %(epoch,train_loss,eval_loss,time_cost))
+        print('iter %d, train_loss = %f , validation_loss = %f, time_cost = %f s'  %(epoch,train_loss,eval_loss,time_cost))
+        
+        if epoch >0:
+            with writer.as_default():
+                tf.summary.scalar('train_loss', train_loss, step=epoch+1)
+                tf.summary.scalar('valid_loss', eval_loss, step=epoch+1)
+                
+        if eval_loss < min_loss:
+            min_loss = eval_loss
+            model.save_weights('./models/best_cnn_model.h5')
 
+        
 
             
 
@@ -70,7 +82,7 @@ if __name__ == '__main__':
     ##############################################
     ##########      hyperparamter   ##############
     batch_size = 8
-    learning_rate = 0.1
+    learning_rate = 0.01
     n_epoch = 50
     print_every = 5
     save_every = 10
