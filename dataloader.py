@@ -20,17 +20,19 @@ class DataLoader:
         else:
             return self.size
 
-    def get_ds(self,batch_size):
+    def get_ds(self,batch_size,evaluate = False):
 
         def random_edit(img):
-            hr_img = tf.image.random_flip_up_down(img)
-            hr_img = tf.image.random_flip_left_right(hr_img)
-            lr_img = tf.image.resize(hr_img, size=[48, 48])
+            if not evaluate:
+                hr_img = tf.image.random_flip_up_down(img)
+                hr_img = tf.image.random_flip_left_right(hr_img)
+                lr_img = tf.image.resize(hr_img, size=[48, 48])
             return lr_img/255.0, hr_img/255.0
 
         def generator():
             for img in self.ds:
-                img = tf.image.random_crop(img, [192, 192, 3])
+                if not evaluate:
+                    img = tf.image.random_crop(img, [192, 192, 3])
                 yield img
 
         for _ in os.listdir(self.FilePath):

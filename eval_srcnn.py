@@ -11,7 +11,7 @@ def evaluate(name,
         model,
         count):
     
-    evalloader.get_ds(1)
+    evalloader.get_ds(batch_size = 1,evaluate=True)
     writer = tf.summary.create_file_writer('./log/'+ name)
     for i,(X,Y) in enumerate(evalloader.train_data):
 
