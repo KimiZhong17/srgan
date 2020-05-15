@@ -7,19 +7,20 @@ import matplotlib.pyplot as plt
 
 
 def evaluate(name,
-        dataloader,
+        evalloader,
         model,
         count):
     
-    model.get_ds(1)
+    evalloader.get_ds(1)
     writer = tf.summary.create_file_writer('./log/'+ name)
-    for i,(X,Y) in enumerate(dataloader):
+    for i,(X,Y) in enumerate(evalloader.train_data):
 
         model.eval()
         output = model(X)
-        writer.add_figure('source_'+ str(i),X.eval())
-        writer.add_figure('source_'+ str(i),output.eval())
-        writer.add_figure('source_'+ str(i),Y.eval())
+        with writer.as_default():
+            tf.summary.image('source_'+ str(i),X,step = 0)
+            tf.summary.image('output_'+ str(i),output,step = 0)
+            tf.summary.image('target_'+ str(i),Y,step = 0)
 
 
         if i>count:
@@ -45,5 +46,5 @@ if __name__ == '__main__':
     
     model_cnn = SRCNN()
     model_cnn.load_weights('./models/best_cnn_model.h5')
-    dataloader = DataLoader('../srgan/DIV2K_valid_HR/')
-    evaluate(name,dataloader,model_cnn,count)
+    evalloader = DataLoader('../srgan/DIV2K_valid_HR/')
+    evaluate(name,evalloader,model_cnn,count)
