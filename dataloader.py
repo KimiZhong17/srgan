@@ -4,6 +4,7 @@ import tensorlayer as tl
 import tensorflow as tf
 from tensorflow.python.data.ops.dataset_ops import AUTOTUNE
 import matplotlib.pyplot as plt
+import os
 
 class DataLoader:
 
@@ -30,8 +31,10 @@ class DataLoader:
         def generator():
             for img in self.ds:
                 img = tf.image.random_crop(img, [192, 192, 3])
-                self.size+=1
                 yield img
+
+        for _ in os.listdir(self.FilePath):
+            self.size += 1
 
         DataList = tl.files.load_file_list(path=self.FilePath, regx='.*.png', printable=False)
         self.ds = tl.vis.read_images(DataList, path=self.FilePath, n_threads=32)
