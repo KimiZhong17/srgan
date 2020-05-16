@@ -10,17 +10,17 @@ def evaluate(name,
         evalloader,
         model,
         count):
-    
-    evalloader.get_ds(batch_size = 1,evaluate=True)
+    print(len(evalloader))
+    evalloader.produce(batch_size = 1)
     writer = tf.summary.create_file_writer('./log/'+ name)
     for i,(X,Y) in enumerate(evalloader.train_data):
 
         model.eval()
         output = model(X)
         with writer.as_default():
-            tf.summary.image('source_'+ str(i),X,step = 0)
-            tf.summary.image('output_'+ str(i),output,step = 0)
-            tf.summary.image('target_'+ str(i),Y,step = 0)
+            tf.summary.image('source_'+ str(i),X+1,step = 0)
+            tf.summary.image('output_'+ str(i),output+1,step = 0)
+            tf.summary.image('target_'+ str(i),Y+1,step = 0)
 
 
         if i>count:

@@ -13,12 +13,12 @@ class DataLoader:
 
 
     def __len__(self):
-        if self.size is None:
+        if not self.size:
             self.size = 0
             for _ in os.listdir(self.sourcePath):
                 self.size += 1
-        else:
-            return self.size
+
+        return self.size
 
 
     def create_data(self,path):
@@ -34,8 +34,11 @@ class DataLoader:
                 yield s
         
         def random_edit1(img):
-            source = tl.prepro.zoom(img, zoom_range=(0.25, 0.25))
+            img = img / (255. / 2.)
+            img = img - 1.
             target = tf.convert_to_tensor(img)
+            source = tf.convert_to_tensor(img)
+            source = tl.prepro.zoom(source, zoom_range=0.25)           
             # source = tf.convert_to_tensor(source)
             return source,target
 

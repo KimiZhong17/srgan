@@ -27,7 +27,7 @@ def train(name,
         loss = 0
         train_loss = 0
         
-        for X,Y in trainloader.train_data:
+        for X,Y in trainloader.data:
             model.train()
             with tf.GradientTape() as tape:               
                 output = model(X)
@@ -40,7 +40,7 @@ def train(name,
         
         
         eval_loss = 0
-        for X,Y in evalloader.train_data:
+        for X,Y in evalloader.data:
             model.eval()
             with tf.GradientTape() as tape:               
                 output = model(X)
@@ -89,13 +89,13 @@ if __name__ == '__main__':
     name = 'srcnn_1'
     ##############################################
     trainloader = DataLoader('../srgan/DIV2K_train_HR/')
-    trainloader.get_ds(batch_size)
+    trainloader.produce(batch_size)
     print('train data loaded')
     evalloader = DataLoader('../srgan/DIV2K_valid_HR/')
-    evalloader.get_ds(batch_size)
+    evalloader.produce(batch_size)
     print('test data loaded')
     model = SRCNN()
-
+    print(len(trainloader))
     
     train(name,trainloader,evalloader,model,batch_size,n_epoch,learning_rate,print_every,save_every)
 
