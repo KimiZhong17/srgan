@@ -23,6 +23,7 @@ class DataLoader:
 
     def create_data(self,path):
         DataList = tl.files.load_file_list(path=path, regx='.*.png', printable=False)
+        DataList = sorted(DataList)
         data = tl.vis.read_images(DataList, path=path, n_threads=32)
         return data
     
@@ -36,11 +37,8 @@ class DataLoader:
         def random_edit1(img):
             img = img / (255. / 2.)
             img = img - 1.
-            target = tf.convert_to_tensor(img)
             source = tf.convert_to_tensor(img)
-            source = tl.prepro.zoom(source, zoom_range=0.25)           
-            # source = tf.convert_to_tensor(source)
-            return source,target
+            return source
 
         def random_edit2(img):
             target = tf.image.random_crop(img, [384, 384, 3])
