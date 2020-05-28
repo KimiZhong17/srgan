@@ -2,7 +2,7 @@ import tensorflow as tf
 import tensorlayer as tl
 from dataloader import DataLoader
 import time
-from srresnet import get_D,get_G
+from srgan import get_D,get_G
 
 def train(
     name,
@@ -12,7 +12,7 @@ def train(
     batch_size,
     n_epoch,
     learning_rate):
-    n_step_epoch = round(n_epoch // batch_size)
+    n_step_epoch = round(len(trainloader) // batch_size)
     G = get_G()
     D = get_D()
     VGG = tl.models.vgg19(pretrained=True, end_with='pool4', mode='static')
@@ -76,10 +76,10 @@ if __name__ == '__main__':
 
     ##############################################
     ##########      hyperparamter   ##############
-    batch_size = 2
+    batch_size = 4
     learning_rate = 0.01
-    n_epoch = 1
-    name = 'srres_1'
+    n_epoch = 50
+    name = 'srgan_1'
     ##############################################
     trainloader = DataLoader('../srgan/DIV2K_train_HR/')
     trainloader.produce(batch_size)
