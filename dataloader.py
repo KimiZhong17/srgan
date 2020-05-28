@@ -21,14 +21,14 @@ class DataLoader:
         return self.size
 
 
-    def create_data(self,path):
-        DataList = tl.files.load_file_list(path=path, regx='.*.png', printable=False)
+    def create_data(self):
+        DataList = tl.files.load_file_list(path=self.sourcePath, regx='.*.png', printable=False)
         DataList = sorted(DataList)
-        data = tl.vis.read_images(DataList, path=path, n_threads=32)
+        data = tl.vis.read_images(DataList, path=self.sourcePath, n_threads=32)
         return data
     
     def produce(self,batch_size):
-        sources = self.create_data(self.sourcePath)
+        sources = self.create_data()
 
         def generator():          
             for s in sources:

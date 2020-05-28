@@ -10,11 +10,8 @@ def train(name,
         trainloader,
         evalloader,
         model,
-        optimizer,
         n_epoch,
-        learning_rate,
-        print_every,
-        save_every):
+        learning_rate):
 
     optimizer = tf.optimizers.Adam(learning_rate = learning_rate)
     writer = tf.summary.create_file_writer('./log/'+ name)
@@ -84,8 +81,6 @@ if __name__ == '__main__':
     batch_size = 8
     learning_rate = 0.01
     n_epoch = 50
-    print_every = 5
-    save_every = 10
     name = 'srcnn_1'
     ##############################################
     trainloader = DataLoader('../srgan/DIV2K_train_HR/')
@@ -97,6 +92,6 @@ if __name__ == '__main__':
     model = SRCNN()
     print(len(trainloader))
     
-    train(name,trainloader,evalloader,model,batch_size,n_epoch,learning_rate,print_every,save_every)
+    train(name,trainloader,evalloader,model,n_epoch,learning_rate)
 
 

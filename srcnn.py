@@ -7,9 +7,10 @@ class SRCNN(Model):
     def __init__(self):
         super(SRCNN,self).__init__()
         self.upsample1 = UpSampling2d(4, method='bicubic')
-        self.conv1 = Conv2d(n_filter=32, filter_size=(9, 9), in_channels=3,act=tf.nn.relu, padding='SAME')
-        self.conv2 = Conv2d(n_filter=16, filter_size=(1, 1),in_channels=32,act=tf.nn.relu, padding='SAME')
-        self.conv3 = Conv2d(n_filter=3, filter_size=(5, 5),in_channels=16, padding='SAME')
+        w_init = tf.random_normal_initializer(stddev=0.02)
+        self.conv1 = Conv2d(n_filter=32, filter_size=(9, 9), in_channels=3,act=tf.nn.relu, padding='SAME', W_init=w_init)
+        self.conv2 = Conv2d(n_filter=16, filter_size=(1, 1),in_channels=32,act=tf.nn.relu, padding='SAME', W_init=w_init)
+        self.conv3 = Conv2d(n_filter=3, filter_size=(5, 5),in_channels=16, padding='SAME', W_init=w_init)
 
     def forward(self,x):
         x = self.upsample1(x)
@@ -21,6 +22,5 @@ class SRCNN(Model):
 
 if __name__ == "__main__":
     model = SRCNN()
-    Input = tl.layers.Input([8, 400, 400, 3],dtype= tf.float32)
-    print(model.forward(Input))
+    print(model)
 
