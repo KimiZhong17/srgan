@@ -22,6 +22,5 @@ class SRCNN(Model):
 
 if __name__ == "__main__":
     model = SRCNN()
-    Input = tl.layers.Input([8, 400, 400, 3],dtype= tf.float32)
-    print(model.forward(Input))
+    print(model)
 

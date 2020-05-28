@@ -49,32 +49,33 @@ class get_D(Model):
     def __init__(self):
         super(get_D,self).__init__()
         w_init = tf.random_normal_initializer(stddev=0.02) 
-        gamma_init = tf.random_normal_initializer(1., 0.02)
+        g_init = tf.random_normal_initializer(1., 0.02)
+        lrelu = lambda x: tl.act.lrelu(x, 0.2)
         df_dim = 64
-        self.conv1 = Conv2d(n_filter=df_dim,filter_size=(4, 4),strides=(2, 2),in_channels=3, act=tf.nn.leaky_relu(0.2), padding='SAME', W_init=w_init)
+        self.conv1 = Conv2d(n_filter=df_dim,filter_size=(4, 4),strides=(2, 2),in_channels=3, act=lrelu, padding='SAME', W_init=w_init)
         self.conv2 = Conv2d(n_filter=df_dim * 2,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim, padding='SAME', W_init=w_init, b_init=None)
-        self.bn1 =  BatchNorm2d(num_features = df_dim * 2, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn1 =  BatchNorm2d(num_features = df_dim * 2, act=lrelu,gamma_init=g_init)
         self.conv3 = Conv2d(n_filter=df_dim * 4,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 2, padding='SAME', W_init=w_init, b_init=None)
-        self.bn2 =  BatchNorm2d(num_features = df_dim * 4, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn2 =  BatchNorm2d(num_features = df_dim * 4, act=lrelu,gamma_init=g_init)
         self.conv4 = Conv2d(n_filter=df_dim * 8,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 4, padding='SAME', W_init=w_init, b_init=None)
-        self.bn3 =  BatchNorm2d(num_features = df_dim * 28, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn3 =  BatchNorm2d(num_features = df_dim * 28, act=lrelu,gamma_init=g_init)
         self.conv5 = Conv2d(n_filter=df_dim * 16,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 8, padding='SAME', W_init=w_init, b_init=None)
-        self.bn4 =  BatchNorm2d(num_features = df_dim * 16, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn4 =  BatchNorm2d(num_features = df_dim * 16, act=lrelu,gamma_init=g_init)
         self.conv6 = Conv2d(n_filter=df_dim * 32,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 16, padding='SAME', W_init=w_init, b_init=None)
-        self.bn5 =  BatchNorm2d(num_features = df_dim * 32, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn5 =  BatchNorm2d(num_features = df_dim * 32, act=lrelu,gamma_init=g_init)
         self.conv7 = Conv2d(n_filter=df_dim * 16,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 32, padding='SAME', W_init=w_init, b_init=None)
-        self.bn6 =  BatchNorm2d(num_features = df_dim * 16, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn6 =  BatchNorm2d(num_features = df_dim * 16, act=lrelu,gamma_init=g_init)
         self.conv8 = Conv2d(n_filter=df_dim * 8,filter_size=(1, 1),strides=(1, 1),in_channels=df_dim* 16, padding='SAME', W_init=w_init, b_init=None)
-        self.bn7 =  BatchNorm2d(num_features = df_dim * 8, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn7 =  BatchNorm2d(num_features = df_dim * 8, act=lrelu,gamma_init=g_init)
         self.conv9 = Conv2d(n_filter=df_dim * 2,filter_size=(1, 1),strides=(1, 1),in_channels=df_dim* 8, padding='SAME', W_init=w_init, b_init=None)
-        self.bn8 =  BatchNorm2d(num_features = df_dim * 2, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn8 =  BatchNorm2d(num_features = df_dim * 2, act=lrelu,gamma_init=g_init)
         self.conv10 = Conv2d(n_filter=df_dim * 2,filter_size=(3, 3),strides=(1, 1),in_channels=df_dim* 2, padding='SAME', W_init=w_init, b_init=None)
-        self.bn9 =  BatchNorm2d(num_features = df_dim * 2, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn9 =  BatchNorm2d(num_features = df_dim * 2, act=lrelu,gamma_init=g_init)
         self.conv11 = Conv2d(n_filter=df_dim * 8,filter_size=(3, 3),strides=(1, 1),in_channels=df_dim* 8, padding='SAME', W_init=w_init, b_init=None)
-        self.bn10 =  BatchNorm2d(num_features = df_dim * 8, act=tf.nn.leaky_relu(0.2),gamma_init=g_init)
+        self.bn10 =  BatchNorm2d(num_features = df_dim * 8, act=lrelu,gamma_init=g_init)
         self.add1 = Elementwise(tf.add)
-        self.flat1 = flatten()
-        self.dence1 = Dense(n_units=1, W_init=w_init)
+        self.flat1 = Flatten()
+        self.dence1 = Dense(n_units=1, W_init=w_init, in_channels=df_dim * 8)
 
 
 
@@ -106,16 +107,11 @@ class get_D(Model):
 
             return x
 
-class get_Gval(Model):
-    def __init__(self):
-        super(get_Gval,self).__init__()
-        w_init = tf.random_normal_initializer(stddev=0.02)
-        g_init = tf.random_normal_initializer(1., 0.02)
 
 
 if __name__ == "__main__":
     G = get_G()
     D = get_D()
-    print(G.summary())
-    print(D.summary())
+    print(G)
+    print(D)
 
