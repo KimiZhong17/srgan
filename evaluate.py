@@ -3,7 +3,7 @@ import tensorlayer as tl
 from srcnn import SRCNN
 from dataloader import DataLoader
 import matplotlib.pyplot as plt
-from srresnet import get_G
+from srgan import get_G
 
 
 def evaluate(name,
@@ -61,10 +61,10 @@ if __name__ == '__main__':
         model.load_weights('./models/g.h5')
     elif model_name == 'srresnet':
         model = get_G()
-        model.load_weights('./models/best_res_model.h5')
+        model.load_weights('./models/best_resnet_model.h5')
     else:
         print('invalid model')
-        break
+        quit(1)
     sourceloader = DataLoader('../srgan/DIV2K_valid_LR_bicubic/X4/')
     labelloader = DataLoader('../srgan/DIV2K_valid_HR/')
     evaluate(model_name,sourceloader,labelloader,model,count=1)
