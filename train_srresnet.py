@@ -1,22 +1,32 @@
 import tensorflow as tf
 import tensorlayer as tl
-from srcnn import SRCNN
 from dataloader import DataLoader
 import time
 from srresnet import get_D,get_G
 
-def train(n_epoch=100, batch_size=1,learning_rate=1e-4,tds=None):
+def train(
+    name,
+    trainloader,
+    D,
+    G,
+    batch_size,
+    n_epoch,
+    learning_rate,
+    tds=None):
     n_step_epoch = round(n_epoch // batch_size)
-    G = get_G((batch_size, 96, 96, 3))
-    D = get_D((batch_size, 384, 384, 3))
+    G = get_G()
+    D = get_D()
     VGG = tl.models.vgg19(pretrained=True, end_with='pool4', mode='static')
     g_optimizer_init = tf.optimizers.Adam(learning_rate)
     g_optimizer = tf.optimizers.Adam(learning_rate)
     d_optimizer = tf.optimizers.Adam(learning_rate)
+    G.train()
+    D.train()
+    VGG.train()
 
     for epoch in range(n_epoch):
         start_time = time.time()
-        for step, (lr_patchs, hr_patchs) in enumerate(tds):
+        for step, (lr_patchs, hr_patchs) in enumerate(trainloader.data):
             with tf.GradientTape() as tape:
                 fake_hr_patchs = G(lr_patchs)
                 # compute loss and update model
@@ -27,7 +37,7 @@ def train(n_epoch=100, batch_size=1,learning_rate=1e-4,tds=None):
                 epoch, n_epoch, step, n_step_epoch, time.time() - start_time, mse_loss))
 
     for epoch in range(n_epoch):
-        for step, (lr_patchs, hr_patchs) in enumerate(tds):
+        for step, (lr_patchs, hr_patchs) in enumerate(trainloader.data):
             if lr_patchs.shape[0] != batch_size:  # if the remaining data in this epoch < batch_size
                 break
             step_time = time.time()
@@ -56,3 +66,23 @@ def train(n_epoch=100, batch_size=1,learning_rate=1e-4,tds=None):
     tl.files.exists_or_mkdir('models')
     G.save_weights('./models/g.h5')
     D.save_weights('./models/d.h5')
+
+
+if __name__ == '__main__':
+
+    ##############################################
+    ##########      hyperparamter   ##############
+    batch_size = 8
+    learning_rate = 0.01
+    n_epoch = 50
+    name = 'srres_1'
+    ##############################################
+    trainloader = DataLoader('../srgan/DIV2K_train_HR/')
+    trainloader.produce(batch_size)
+    print('train data loaded')
+    D = get_D()
+    G = get_G()
+    print(len(trainloader))
+    
+    train(name,trainloader,D,G,batch_size,n_epoch,learning_rate)
+
