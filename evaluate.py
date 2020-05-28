@@ -3,7 +3,7 @@ import tensorlayer as tl
 from srcnn import SRCNN
 from dataloader import DataLoader
 import matplotlib.pyplot as plt
-
+from srresnet import get_G
 
 
 def evaluate(name,
@@ -35,17 +35,36 @@ def evaluate(name,
             tf.summary.image('target_'+ str(i),Y,step = 0)
             print('saved')
 
+        
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 if __name__ == '__main__':
-    ##############################################
-    ##########      hyperparamter   ##############
-    count = 1
-    name = 'srcnn_1'
-    ##############################################
-    
-    model_cnn = SRCNN()
-    model_cnn.load_weights('./models/best_cnn_model.h5')
+
+    import argparse
+    parser = argparse.ArgumentParser(description= 'built-in bicubic method')
+    parser.add_argument('-m', '--model', required=True, type=str, help="Model type")
+    args = parser.parse_args()
+    model_name = args.model
+    if model_name == 'srcnn':
+        model = SRCNN()
+        model.load_weights('./models/best_cnn_model.h5')
+    elif model_name == 'srgan':
+        model = get_G()
+        model.load_weights('./models/g.h5')
+    elif model_name == 'srresnet':
+        model = get_G()
+        model.load_weights('./models/best_res_model.h5')
+    else:
+        print('invalid model')
+        break
     sourceloader = DataLoader('../srgan/DIV2K_valid_LR_bicubic/X4/')
     labelloader = DataLoader('../srgan/DIV2K_valid_HR/')
-    evaluate(name,sourceloader,labelloader,model_cnn,count)
+    evaluate(model_name,sourceloader,labelloader,model,count=1)
