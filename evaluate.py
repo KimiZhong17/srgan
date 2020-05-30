@@ -9,8 +9,7 @@ from srgan import get_G
 def evaluate(name,
         sourceloader,
         labelloader,
-        model,
-        count):
+        model):
     
     sourceloader.produce(batch_size = 1)
     labelloader.produce(batch_size = 1)
@@ -18,8 +17,6 @@ def evaluate(name,
     
     for i,(X,Y) in enumerate(zip(sourceloader.data,labelloader.data)):
         
-        if i+1>count:
-            break
             
         print('start')
         model.eval()
@@ -65,6 +62,6 @@ if __name__ == '__main__':
     else:
         print('invalid model')
         quit(1)
-    sourceloader = DataLoader('../srgan/DIV2K_valid_LR_bicubic/X4/')
-    labelloader = DataLoader('../srgan/DIV2K_valid_HR/')
-    evaluate(model_name,sourceloader,labelloader,model,count=1)
+    sourceloader = DataLoader('../srgan/DIV2K_valid_LR_bicubic/X4/',ndata = 1)
+    labelloader = DataLoader('../srgan/DIV2K_valid_HR/',ndata = 1)
+    evaluate(model_name,sourceloader,labelloader,model)

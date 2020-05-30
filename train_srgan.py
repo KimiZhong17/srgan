@@ -20,7 +20,7 @@ def train(
     g_optimizer = tf.optimizers.Adam(learning_rate)
     d_optimizer = tf.optimizers.Adam(learning_rate)
     writer = tf.summary.create_file_writer('./log/'+ name)
-    
+    mini_loss = float('inf')
     G.train()
     D.train()
     VGG.train()
@@ -67,9 +67,10 @@ def train(
             with writer.as_default():
                 tf.summary.scalar('D_loss', g_loss, step=epoch+1)
                 tf.summary.scalar('G_loss', d_loss, step=epoch+1)
-    tl.files.exists_or_mkdir('models')
-    G.save_weights('./models/g.h5')
-    D.save_weights('./models/d.h5')
+        if g_loss< mini_loss:
+            G.save_weights('./models/g.h5')
+            D.save_weights('./models/d.h5')
+            mini_loss = g_loss
 
 
 if __name__ == '__main__':
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     batch_size = 4
     learning_rate = 0.01
     n_epoch = 50
-    name = 'srgan_1'
+    name = 'srgan_2'
     ##############################################
     trainloader = DataLoader('../srgan/DIV2K_train_HR/')
     trainloader.produce(batch_size)

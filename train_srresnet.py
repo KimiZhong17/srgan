@@ -81,7 +81,7 @@ if __name__ == '__main__':
     batch_size = 8
     learning_rate = 0.01
     n_epoch = 50
-    name = 'srresnet_1'
+    name = 'srresnet'
     ##############################################
     trainloader = DataLoader('../srgan/DIV2K_train_HR/')
     trainloader.produce(batch_size)

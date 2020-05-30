@@ -61,7 +61,7 @@ class get_D(Model):
         self.bn4 =  BatchNorm2d(num_features = df_dim * 16, act=lrelu,gamma_init=g_init)
         self.conv6 = Conv2d(n_filter=df_dim * 32,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 16, padding='SAME', W_init=w_init, b_init=None)
         self.bn5 =  BatchNorm2d(num_features = df_dim * 32, act=lrelu,gamma_init=g_init)
-        self.conv7 = Conv2d(n_filter=df_dim * 16,filter_size=(4, 4),strides=(2, 2),in_channels=df_dim* 32, padding='SAME', W_init=w_init, b_init=None)
+        self.conv7 = Conv2d(n_filter=df_dim * 16,filter_size=(1, 1),strides=(1, 1),in_channels=df_dim* 32, padding='SAME', W_init=w_init, b_init=None)
         self.bn6 =  BatchNorm2d(num_features = df_dim * 16, act=lrelu,gamma_init=g_init)
         self.conv8 = Conv2d(n_filter=df_dim * 8,filter_size=(1, 1),strides=(1, 1),in_channels=df_dim* 16, padding='SAME', W_init=w_init, b_init=None)
         self.bn7 =  BatchNorm2d(num_features = df_dim * 8, act=lrelu,gamma_init=g_init)
@@ -73,7 +73,7 @@ class get_D(Model):
         self.bn10 =  BatchNorm2d(num_features = df_dim * 8,gamma_init=g_init)
         self.add1 = Elementwise(combine_fn=tf.add, act=lrelu)
         self.flat1 = Flatten()
-        self.dence1 = Dense(n_units=1, W_init=w_init, in_channels= 72*df_dim)
+        self.dence1 = Dense(n_units=1, W_init=w_init, in_channels= 288*df_dim)
 
 
 

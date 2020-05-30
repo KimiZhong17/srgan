@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 import os
 
 class DataLoader:
-    def __init__(self,sourcePath):
+    def __init__(self,sourcePath,ndata = None):
         self.sourcePath = sourcePath
         self.data = None
         self.size = None
-
+        self.ndata = ndata
 
     def __len__(self):
         if not self.size:
@@ -24,6 +24,8 @@ class DataLoader:
     def create_data(self):
         DataList = tl.files.load_file_list(path=self.sourcePath, regx='.*.png', printable=False)
         DataList = sorted(DataList)
+        if self.ndata != None:
+            DataList = DataList[:self.ndata]
         data = tl.vis.read_images(DataList, path=self.sourcePath, n_threads=32)
         return data
     
