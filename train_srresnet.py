@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorlayer as tl
-from srgan import get_G
+from srresnet import SRresnet
 from dataloader import DataLoader
 import time
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     ##############################################
     ##########      hyperparamter   ##############
     batch_size = 8
-    learning_rate = 0.01
+    learning_rate = 0.0001
     n_epoch = 50
     name = 'srresnet'
     ##############################################
@@ -89,7 +89,8 @@ if __name__ == '__main__':
     evalloader = DataLoader('../srgan/DIV2K_valid_HR/')
     evalloader.produce(batch_size)
     print('test data loaded')
-    model = get_G()
+    model = SRresnet()
+#     model.load_weights('./models/best_resnet_model.h5')
     print(len(trainloader))
     
     train(name,trainloader,evalloader,model,n_epoch,learning_rate)
