@@ -133,3 +133,4 @@ dmypy.json
 models/
 log/
 .h5
+core.*
