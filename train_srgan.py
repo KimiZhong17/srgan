@@ -96,9 +96,9 @@ if __name__ == '__main__':
     trainloader = DataLoader('../srgan/DIV2K_train_HR/')
     trainloader.produce(batch_size)
     print('train data loaded')
-    D = get_D((batch_size, 384, 384, 3))
-    G = get_G((batch_size, 96, 96, 3))
+    D = get_D()
+    G = get_G()
     print(len(trainloader))
-    
+   
     train(name,trainloader,D,G,batch_size,n_epoch,learning_rate)
 

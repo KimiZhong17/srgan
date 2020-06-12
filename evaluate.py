@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from srgan import get_G
 from srresnet import SRresnet
 import numpy as np
-
+import os
 def evaluate(name,
         sourceloader,
         labelloader,
@@ -63,8 +63,8 @@ if __name__ == '__main__':
         model = SRCNN()
         model.load_weights('./models/best_cnn_model.h5')
     elif model_name == 'srgan':
-        model = get_G([1, None, None, 3])
-        model.load_weights('./models/g2.h5')
+        model = get_G()
+        model.load_weights('./models/g.h5')
     elif model_name == 'srresnet':
         model = SRresnet()
         model.load_weights('./models/best_resnet_model.h5')
@@ -73,4 +73,5 @@ if __name__ == '__main__':
         quit(1)
     sourceloader = DataLoader('../srgan/DIV2K_valid_LR_bicubic/X4/',ndata = 1)
     labelloader = DataLoader('../srgan/DIV2K_valid_HR/',ndata = 1)
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
     evaluate(model_name,sourceloader,labelloader,model)
