@@ -9,9 +9,9 @@ Group Member: Xupeng Yu, Hongquan Zhang, Guoren Zhong
 ## Usage:
 - Training:
   Each of the three models has its own training code. To train each model, just run:
-> python train_srcnn.py
-> python train_srresnet.py
-> python train_srgan.py
+> python train_srcnn.py <br/>
+> python train_srresnet.py <br/>
+> python train_srgan.py <br/>
 - Testing:
   The three models have the same evaluation process. To test each model,run:
 > python evaluate.py -m MODEL #The model youwant to test,here we support ['srcnn','srresnet','srgan']
